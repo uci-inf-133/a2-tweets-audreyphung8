@@ -18,15 +18,27 @@ function parseTweets(runkeeper_tweets)
 
 	earliestTweet = tweet_array[0].time;
 	latestTweet = tweet_array[0].time;
-
-	console.log(earliestTweet);
-	console.log(latestTweet);
 	tweet_array.forEach(tweet => {
 		earliestTweet = Math.min(earliestTweet,tweet.time);
 		latestTweet = Math.max(latestTweet, tweet.time);
 	});
-	console.log(new Date(earliestTweet));
-	console.log(new Date(latestTweet));
+	earliestTweet = new Date(earliestTweet);
+	latestTweet = new Date(latestTweet);
+
+
+	
+	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
+	document.getElementById('lastDate').innerText = formatDates(latestTweet);
+}
+
+function formatDates(date)
+{
+	const format = date.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
+	return format;
 }
 
 //Wait for the DOM to load
