@@ -1,8 +1,12 @@
-class Tweet {
+
+
+class Tweet 
+{
 	private text:string;
 	time:Date;
 
-	constructor(tweet_text:string, tweet_time:string) {
+	constructor(tweet_text:string, tweet_time:string) 
+    {
         this.text = tweet_text;
 		this.time = new Date(tweet_time);//, "ddd MMM D HH:mm:ss Z YYYY"
 	}
