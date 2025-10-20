@@ -1,5 +1,3 @@
-
-
 class Tweet 
 {
 	private text:string;
@@ -15,11 +13,11 @@ class Tweet
     get source():string 
     {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        if (this.text.toLowerCase().startsWith("Just completed"))
+        if (this.text.toLowerCase().includes("completed"))
         {
             return "completed_event";
         }
-        else if (this.text.toLowerCase().startsWith("just posted"))
+        else if (this.text.toLowerCase().includes("posted"))
         {
             return "live_event";
         }

@@ -9,8 +9,6 @@ function parseTweets(runkeeper_tweets)
 	tweet_array = runkeeper_tweets.map(function(tweet) 
 	{
 		return new Tweet(tweet.text, tweet.created_at);
-
-		
 	});
 	
 	//This line modifies the DOM, searching for the tag with the numberTweets ID and updating the text.
@@ -21,6 +19,7 @@ function parseTweets(runkeeper_tweets)
 	//Begins with default values
 	var earliestTweet = tweet_array[0].time; 
 	var latestTweet = tweet_array[0].time; 
+	var category = "";
 	//Takes the min and max between the times
 	tweet_array.forEach(tweet => {
 		earliestTweet = Math.min(earliestTweet,tweet.time); 
@@ -33,6 +32,8 @@ function parseTweets(runkeeper_tweets)
 	//Finds the firstDate/lastDate ID and update the text
 	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
+
+	console.log('First source:', tweet_array[0].source); 
 }
 
 function formatDates(date)
