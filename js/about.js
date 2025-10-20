@@ -19,7 +19,7 @@ function parseTweets(runkeeper_tweets)
 	//Begins with default values
 	var earliestTweet = tweet_array[0].time; 
 	var latestTweet = tweet_array[0].time; 
-	var category = "";
+
 	//Takes the min and max between the times
 	tweet_array.forEach(tweet => {
 		earliestTweet = Math.min(earliestTweet,tweet.time); 
@@ -32,9 +32,28 @@ function parseTweets(runkeeper_tweets)
 	//Finds the firstDate/lastDate ID and update the text
 	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
-
-	console.log('First source:', tweet_array[0].source); 
+	const countCategories = calculateCategory(tweet_array);
+	console.log(countCategories);
+	console.log(tweet_array.length);
 }
+
+function calculateCategory(allTweets)
+{
+	const categories = {
+		completed_event: 0,
+		live_event: 0,
+		achievement: 0,
+		miscellaneous: 0,
+	};
+
+	allTweets.forEach(tweet => {
+		const result = tweet.source;
+		categories[result] += 1;
+	})
+
+	return categories;
+}
+
 
 function formatDates(date)
 {
