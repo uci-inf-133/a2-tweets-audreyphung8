@@ -9,6 +9,7 @@ function parseTweets(runkeeper_tweets)
 	tweet_array = runkeeper_tweets.map(function(tweet) 
 	{
 		return new Tweet(tweet.text, tweet.created_at);
+
 		
 	});
 	
@@ -16,17 +17,20 @@ function parseTweets(runkeeper_tweets)
 	//It works correctly, your task is to update the text of the other tags in the HTML file!
 	document.getElementById('numberTweets').innerText = tweet_array.length;
 
-	earliestTweet = tweet_array[0].time;
-	latestTweet = tweet_array[0].time;
+	//Lines 20-30 finds the earliest and latest tweets
+	//Begins with default values
+	var earliestTweet = tweet_array[0].time; 
+	var latestTweet = tweet_array[0].time; 
+	//Takes the min and max between the times
 	tweet_array.forEach(tweet => {
-		earliestTweet = Math.min(earliestTweet,tweet.time);
+		earliestTweet = Math.min(earliestTweet,tweet.time); 
 		latestTweet = Math.max(latestTweet, tweet.time);
 	});
+	//Math function changes the time to integers so must convert back to Date object
 	earliestTweet = new Date(earliestTweet);
 	latestTweet = new Date(latestTweet);
 
-
-	
+	//Finds the firstDate/lastDate ID and update the text
 	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
 }
@@ -34,6 +38,7 @@ function parseTweets(runkeeper_tweets)
 function formatDates(date)
 {
 	const format = date.toLocaleDateString('en-US', {
+		weekday: 'long',
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric'
