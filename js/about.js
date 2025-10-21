@@ -34,6 +34,7 @@ function parseTweets(runkeeper_tweets)
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
 
 	calculateCategory(tweet_array);
+	console.log(tweet_array[5830].writtenText);
 }
 
 //Calculate the percentages of the categories
