@@ -32,11 +32,11 @@ function parseTweets(runkeeper_tweets)
 	//Finds the firstDate/lastDate ID and update the text
 	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
-	const countCategories = calculateCategory(tweet_array);
-	console.log(countCategories);
-	console.log(tweet_array.length);
+
+	calculateCategory(tweet_array);
 }
 
+//Calculate the percentages of the categories
 function calculateCategory(allTweets)
 {
 	const categories = {
@@ -47,11 +47,24 @@ function calculateCategory(allTweets)
 	};
 
 	allTweets.forEach(tweet => {
-		const result = tweet.source;
-		categories[result] += 1;
+		const source = tweet.source;
+		categories[source] += 1;
 	})
 
-	return categories;
+	//Update the spans for each of the tweet categories
+	document.querySelector('.completedEvents').textContent = categories.completed_event;
+	document.querySelector('.completedEventsPct').textContent = math.format((categories.completed_event / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
+
+	document.querySelector('.liveEvents').textContent = categories.live_event;
+	document.querySelector('.liveEventsPct').textContent = math.format((categories.live_event / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
+
+	document.querySelector('.achievements').textContent = categories.achievement;
+	document.querySelector('.achievementsPct').textContent = math.format((categories.achievement / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
+	
+	document.querySelector('.miscellaneous').textContent = categories.miscellaneous;
+	document.querySelector('.miscellaneousPct').textContent = math.format((categories.miscellaneous / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
+
+	//return categories;
 }
 
 
