@@ -32,9 +32,7 @@ function parseTweets(runkeeper_tweets)
 	//Finds the firstDate/lastDate ID and update the text
 	document.getElementById('firstDate').innerText = formatDates(earliestTweet);
 	document.getElementById('lastDate').innerText = formatDates(latestTweet);
-
 	calculateCategory(tweet_array);
-	console.log(tweet_array[5830].writtenText);
 }
 
 //Calculate the percentages of the categories
@@ -47,13 +45,22 @@ function calculateCategory(allTweets)
 		miscellaneous: 0,
 	};
 
+	var written = 0;
 	allTweets.forEach(tweet => {
 		const source = tweet.source;
 		categories[source] += 1;
+
+		if (source == "completed_event")
+		{
+			if (tweet.written)
+			{
+				written++;
+			}
+		}
 	})
 
 	//Update the spans for each of the tweet categories
-	document.querySelector('.completedEvents').textContent = categories.completed_event;
+	document.querySelectorAll('.completedEvents').forEach(c => c.textContent = categories.completed_event);
 	document.querySelector('.completedEventsPct').textContent = math.format((categories.completed_event / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
 
 	document.querySelector('.liveEvents').textContent = categories.live_event;
@@ -65,6 +72,9 @@ function calculateCategory(allTweets)
 	document.querySelector('.miscellaneous').textContent = categories.miscellaneous;
 	document.querySelector('.miscellaneousPct').textContent = math.format((categories.miscellaneous / allTweets.length) * 100, {notation: 'fixed', precision: 2}) + "%";
 
+	document.querySelector('.written').textContent = written;
+	document.querySelector('.writtenPct').textContent = math.format((written / categories.completed_event) * 100, {notation: 'fixed', precision: 2}) + "%";
+;
 	//return categories;
 }
 

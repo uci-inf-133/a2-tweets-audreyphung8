@@ -42,14 +42,13 @@ class Tweet
         {
             return true;
         }
-
     }
 
     get writtenText():string 
     {
-        // if(!this.written) {
-        //     return "default written";
-        // }
+        if(!this.written) {
+            return "";
+        }
         //TODO: parse the written text from the tweet
         const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
         const hashtagRegex = /#\w+/g;
