@@ -34,27 +34,33 @@ class Tweet
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
         //TODO: identify whether the tweet is written
-        if (this.text.toLowerCase().includes("check it out!"))
+        if (this.writtenText.length > 0)
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 
     get writtenText():string 
     {
-        if(!this.written) {
-            return "";
-        }
         //TODO: parse the written text from the tweet
         const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
         const hashtagRegex = /#\w+/g;
-        let result = this.text.replace(urlRegex, "");
-        result = result.replace(hashtagRegex, "");
-        return result.trim();
+        let parseEnding = this.text.replace(urlRegex, "").trim();
+        parseEnding = parseEnding.replace(hashtagRegex, "").trim();
+        
+        let indexOfDash = parseEnding.indexOf("-");
+        if (indexOfDash == -1)
+        {
+            return "";
+        }
+        else
+        {
+            return parseEnding.slice(indexOfDash+1).trim();
+        }
     }
 
     get activityType():string {
