@@ -13,11 +13,11 @@ class Tweet
     get source():string 
     {
         //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        if (this.text.toLowerCase().includes("completed"))
+        if (this.text.toLowerCase().includes("completed") || this.text.toLowerCase().includes("posted"))
         {
             return "completed_event";
         }
-        else if (this.text.toLowerCase().includes("posted"))
+        else if (this.text.toLowerCase().includes("right now"))
         {
             return "live_event";
         }
@@ -64,19 +64,49 @@ class Tweet
     }
 
     get activityType():string {
-        if (this.source != 'completed_event') {
+        if (this.source != 'completed_event') 
+        {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
-        return "";
-    }
+        let parseUnit = this.text.indexOf("mi");
+        if (parseUnit == -1)
+        {
+            parseUnit = this.text.indexOf("km");
+        }
 
-    get distance():number {
-        if(this.source != 'completed_event') {
+        let findUnit = this.text.slice(parseUnit + 2).trim();
+        const m = findUnit.match(/\b([A-Za-z]+)\b/);
+        if (m == null)
+        {
+            return "";
+        }
+        else
+        {
+            if (m[1] == "nordic")
+            {
+                return "walk";
+            }
+            return m[1];
+        }
+    }
+    
+    get distance():number 
+    {
+        if (this.source != 'completed_event') {
             return 0;
         }
         //TODO: prase the distance from the text of the tweet
-        return 0;
+        // https://www.geeksforgeeks.org/typescript/how-to-convert-string-to-number-in-typescript/ 
+        let distance = this.text.match(/\d+\.\d+/);
+        if (distance == null)
+        {
+            return NaN;
+        }
+        else
+        {
+            return parseFloat(distance[0]);
+        }
     }
 
     getHTMLTableRow(rowNumber:number):string {
