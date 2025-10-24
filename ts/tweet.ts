@@ -98,14 +98,26 @@ class Tweet
         }
         //TODO: prase the distance from the text of the tweet
         // https://www.geeksforgeeks.org/typescript/how-to-convert-string-to-number-in-typescript/ 
+
         let distance = this.text.match(/\d+\.\d+/);
+        let parsedDistance;
         if (distance == null)
         {
             return NaN;
         }
         else
         {
-            return parseFloat(distance[0]);
+            parsedDistance = parseFloat(distance[0]);
+        }
+        
+        let unit = distance[2];
+        if (unit == "km")
+        {
+            return parsedDistance / 1.609;
+        }
+        else
+        {
+            return parsedDistance;
         }
     }
 
