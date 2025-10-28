@@ -47,82 +47,72 @@ class Tweet
     get writtenText():string 
     {
         //TODO: parse the written text from the tweet
+        const hashtagRegex = /\s*#\w+\s*$/g;
         const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
-        const hashtagRegex = /#\w+/g;
-        let parseEnding = this.text.replace(urlRegex, "").trim();
-        parseEnding = parseEnding.replace(hashtagRegex, "").trim();
         
-        let indexOfDash = parseEnding.indexOf("-");
+        let indexOfDash = this.text.indexOf("-");
         if (indexOfDash == -1)
         {
             return "";
         }
-        else
-        {
-            return parseEnding.slice(indexOfDash+1).trim();
-        }
+        let written_text = this.text.slice(indexOfDash+1).trim();
+        written_text =  written_text.replace(hashtagRegex, "").trim();
+        return written_text.replace(urlRegex, "").trim();
     }
 
-    get activityType():string {
+    get activityType():string 
+    {
         if (this.source != 'completed_event') 
         {
             return "unknown";
         }
         //TODO: parse the activity type from the text of the tweet
-        let parseUnit = this.text.indexOf("mi");
-        if (parseUnit == -1)
+        const activities = ["row", "walk", "bike", "hike", "elliptical", "swim", "skate", "snowboard", "run"];
+        for (let i = 0; i < activities.length; i++)
         {
-            parseUnit = this.text.indexOf("km");
-        }
-
-        let findUnit = this.text.slice(parseUnit + 2).trim();
-        const m = findUnit.match(/\b([A-Za-z]+)\b/);
-        if (m == null)
-        {
-            return "";
-        }
-        else
-        {
-            if (m[1] == "nordic")
+            if (this.text.toLowerCase().includes(activities[i]))
             {
-                return "walk";
+                return activities[i];
             }
-            return m[1];
         }
+        return "unknown";
     }
     
     get distance():number 
     {
-        if (this.source != 'completed_event') {
+        if (this.source != 'completed_event') 
+        {
             return 0;
         }
         //TODO: prase the distance from the text of the tweet
         // https://www.geeksforgeeks.org/typescript/how-to-convert-string-to-number-in-typescript/ 
 
-        let distance = this.text.match(/\d+\.\d+/);
-        let parsedDistance;
-        if (distance == null)
+        const distance = this.text.match(/(\d+(?:\.\d+)?)\s*(km|mi)\b/i);
+        if (!distance)
         {
             return NaN;
-        }
-        else
+        } 
+        //console.log(distance);
+        let parseDistance = parseFloat(distance[1]);
+        const unit = distance[2];
+
+        if (unit === 'km')
         {
-            parsedDistance = parseFloat(distance[0]);
-        }
-        
-        let unit = distance[2];
-        if (unit == "km")
-        {
-            return parsedDistance / 1.609;
-        }
-        else
-        {
-            return parsedDistance;
-        }
+            parseDistance /= 1.609;
+        } 
+
+        return Math.round(parseDistance * 100) / 100;
     }
 
-    getHTMLTableRow(rowNumber:number):string {
+    getHTMLTableRow(rowNumber:number):string 
+    {
         //TODO: return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
-        return "<tr></tr>";
+        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
+
+        return `<tr>
+                <td>${rowNumber + 1}</td>
+                <td>${this.activityType}</td>
+                <td>${this.writtenText} <a href="${this.text.match(urlRegex)}" target="_blank">${this.text.match(urlRegex)}</td>
+                </tr>`;
     }
 }
