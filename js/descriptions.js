@@ -26,9 +26,10 @@ function addEventHandlerForSearch()
 	document.getElementById('searchText').innerText = "";
 
 	searchBar.addEventListener('input', () => {
-		
+		//Checks for empty string to cover instances of the user deleting all characters in the search bar
 		if (searchBar.value.trim().toLowerCase() == "")
 		{
+			//Clears the search count, text, table 
 			document.getElementById('searchCount').innerText = 0;
 			document.getElementById('searchText').innerText = "";
 			document.getElementById('tweetTable').innerHTML = "";
